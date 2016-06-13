@@ -72,22 +72,22 @@ step2:
 	docker network create net_splunk
 	docker volume create --name=volume_splunk_etc
 	docker volume create --name=volume_splunk_var
-	docker run --name splunk \
-		--hostname splunk \
-		--net net_splunk \
-		--env SPLUNK_START_ARGS=--accept-license \
-		--env SPLUNK_USER=root \
-		--env SPLUNK_ENABLE_LISTEN=9997 \
-		--env SPLUNK_ADD="index docker" \
-		--env SPLUNK_ADD_1="index mysql_logs" \
-		--publish 8000:8000 \
-		--publish 8088:8088 \
-		--volume /var/lib/docker/containers:/host/containers:ro \
-		--volume /var/log:/docker/log:ro \
-		--volume /var/run/docker.sock:/var/run/docker.sock:ro \
-		--volume volume_splunk_etc:/opt/splunk/etc \
-		--volume volume_splunk_var:/opt/splunk/var \
-		-d splunk/enterprise:6.4.1-monitor
+#	docker run --name splunk \
+#		--hostname splunk \
+#		--net net_splunk \
+#		--env SPLUNK_START_ARGS=--accept-license \
+#		--env SPLUNK_USER=root \
+#		--env SPLUNK_ENABLE_LISTEN=9997 \
+#		--env SPLUNK_ADD="index docker" \
+#		--env SPLUNK_ADD_1="index mysql_logs" \
+#		--publish 8000:8000 \
+#		--publish 8088:8088 \
+#		--volume /var/lib/docker/containers:/host/containers:ro \
+#		--volume /var/log:/docker/log:ro \
+#		--volume /var/run/docker.sock:/var/run/docker.sock:ro \
+#		--volume volume_splunk_etc:/opt/splunk/etc \
+#		--volume volume_splunk_var:/opt/splunk/var \
+#		-d splunk/enterprise:6.4.1-monitor
 	@echo ""
 	@echo "+ - - - - - - - - - - - - +         + - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
 	@echo " net_splunk                          Volumes                                                 |"
@@ -100,7 +100,7 @@ step2:
 	@echo "|    |                |   |         |  +--------------------------------------------------+"
 	@echo "     |                |                                                                      |"
 	@echo "|    |                |   |         + - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-	@echo "     |     splunk     |                +--------------------------------------------------+"
+	@echo "     | dockeritmonitoring_splunkenterprise_1     |                +--------------------------------------------------+"
 	@echo "|    |                |---+----------->|  /var/lib/docker/containers:/host/containers:ro  |"
 	@echo "     |                |                +--------------------------------------------------+"
 	@echo "|    |                |   |            +--------------------------------------------------+"
@@ -123,7 +123,7 @@ step3:
 	docker run --name splunkforwarder_mysql_logs \
 		--net net_splunk \
 		--volume volume_wordpress_db_logs:/var/log/mysql \
-		--env SPLUNK_FORWARD_SERVER=splunk:9997 \
+		--env SPLUNK_FORWARD_SERVER=dockeritmonitoring_splunkenterprise_1:9997 \
 		--env SPLUNK_ADD="monitor /var/log/mysql/ -index mysql_logs -auth admin:changeme" \
 		-d splunk/universalforwarder:6.4.1
 	@echo ""
@@ -166,7 +166,7 @@ step4:
 		--name my_app \
 		--net net_myapp \
 		--env SPLUNK_TOKEN=00000000-0000-0000-0000-000000000000 \
-		--env SPLUNK_URL=https://splunk:8088 \
+		--env SPLUNK_URL=https://dockeritmonitoring_splunkenterprise_1:8088 \
 		--env SPLUNK_SOURCETYPE=fake-data \
 		--env SPLUNK_SOURCE=nodejs-sdk \
 		-d my_app
@@ -199,7 +199,7 @@ step5:
 		--net net_wordpress \
 			--log-driver=splunk \
 				--log-opt splunk-token=00000000-0000-0000-0000-000000000000 \
-				--log-opt splunk-url=https://localhost:8088 \
+				--log-opt splunk-url=https://192.168.99.100:8088 \
 				--log-opt splunk-insecureskipverify=true \
 				--log-opt splunk-index=docker \
 				--log-opt splunk-sourcetype=httpevent \
@@ -216,7 +216,7 @@ step5:
 		--net net_wordpress \
 			--log-driver=splunk \
 				--log-opt splunk-token=00000000-0000-0000-0000-000000000000 \
-				--log-opt splunk-url=https://localhost:8088 \
+				--log-opt splunk-url=https://192.168.99.100:8088 \
 				--log-opt splunk-insecureskipverify=true \
 				--log-opt splunk-index=docker \
 				--log-opt splunk-sourcetype=httpevent \
