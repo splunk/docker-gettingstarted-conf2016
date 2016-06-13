@@ -16,7 +16,7 @@ Logger.eventFormatter = function (message, severity) {
 }
 
 function sendNext() {
-    var line = faker.fake("{{internet.email}} from {{internet.ip}} with {{finance.account}}");
+    var line = faker.fake("{{internet.email}} from {{internet.ip}} with {{finance.account}} [{{internet.protocol}}]");
     console.log("Sending: ", line);
     // Sending data to Splunk
     Logger.send({
@@ -28,7 +28,7 @@ function sendNext() {
             sourcetype: process.env.SPLUNK_SOURCETYPE
         }
     }, function(err, resp, body) {
-        sendNext();
+        setTimeout(sendNext, 100);
         console.log("Response:", body);
     });
 }
