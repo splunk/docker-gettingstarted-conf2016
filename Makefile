@@ -41,6 +41,31 @@ step1:
 		--net net_wordpress \
 		--publish 80:80 \
 		-d wordpress
+	@echo ""
+	@echo "+ - - - - - - - - - - - - - - - +    + - - - - - - - - - - - - - - - - - - - - - - - - - +"
+	@echo " net_wordpress                        Volumes"
+	@echo "|                               |    |                                                   |"
+	@echo "     +----------------------+             +------------------------------------------+"
+	@echo "|    |wordpress_db          +---+----+--->| volume_wordpress_db_data:/var/lib/mysql  |   |"
+	@echo "     |                      |             +------------------------------------------+"
+	@echo "|    |                      |   |    |    +------------------------------------------+   |"
+	@echo "     |                      +------------>| volume_wordpress_db_logs:/var/log/mysql  |"
+	@echo "|    +----------------------+   |    |    +------------------------------------------+   |"
+	@echo "     +----------------------+"
+	@echo "|    |wordpress             |   |    + - - - - - - - - - - - - - - - - - - - - - - - - - +"
+	@echo "     |                      |"
+	@echo "|    |                      |   |"
+	@echo "     |                      |"
+	@echo "|    +-----------+----------+   |"
+	@echo "                 |"
+	@echo "|                |              |"
+	@echo " - - - - - - - - + - - - - - - -"
+	@echo "                 |"
+	@echo "                 v"
+	@echo "            +----------+"
+	@echo "            |    80    |"
+	@echo "            +----------+"
+	@echo ""
 
 step2:
 	@echo "\n- Creating new network net_splunk for Splunk\n"
@@ -55,7 +80,6 @@ step2:
 		--env SPLUNK_ENABLE_LISTEN=9997 \
 		--env SPLUNK_ADD="index docker" \
 		--env SPLUNK_ADD_1="index mysql_logs" \
-		--env SPLUNK_CMD="http-event-collector create -uri https://localhost:8089 -auth admin:changeme -name docker -index docker" \
 		--publish 8000:8000 \
 		--publish 8088:8088 \
 		--volume /var/lib/docker/containers:/host/containers:ro \
@@ -64,6 +88,35 @@ step2:
 		--volume volume_splunk_etc:/opt/splunk/etc \
 		--volume volume_splunk_var:/opt/splunk/var \
 		-d splunk/enterprise:6.4.1-monitor
+	@echo ""
+	@echo "+ - - - - - - - - - - - - +         + - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+	@echo " net_splunk                          Volumes                                                 |"
+	@echo "|                         |         |"
+	@echo "     +----------------+                +--------------------------------------------------+  |"
+	@echo "|    |                |---+---------+->|        volume_splunk_etc:/opt/splunk/etc         |"
+	@echo "     |                |                +--------------------------------------------------+  |"
+	@echo "|    |                |   |         |  +--------------------------------------------------+"
+	@echo "     |                |--------------->|        volume_splunk_var:/opt/splunk/var         |  |"
+	@echo "|    |                |   |         |  +--------------------------------------------------+"
+	@echo "     |                |                                                                      |"
+	@echo "|    |                |   |         + - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+	@echo "     |     splunk     |                +--------------------------------------------------+"
+	@echo "|    |                |---+----------->|  /var/lib/docker/containers:/host/containers:ro  |"
+	@echo "     |                |                +--------------------------------------------------+"
+	@echo "|    |                |   |            +--------------------------------------------------+"
+	@echo "     |                |--------------->|             /var/log:/docker/log:ro              |"
+	@echo "|    |                |   |            +--------------------------------------------------+"
+	@echo "     |                |                +--------------------------------------------------+"
+	@echo "|    |                |---+----------->|   /var/run/docker.sock:/var/run/docker.sock:ro   |"
+	@echo "     +--+---------+---+                +--------------------------------------------------+"
+	@echo "|       |         |       |"
+	@echo " - - - -|- - - - -|- - - -"
+	@echo "        |         |"
+	@echo "        v         v"
+	@echo "    +------+  +------+"
+	@echo "    | 8000 |  | 8088 |"
+	@echo "    +------+  +------+"
+	@echo ""
 
 step3:
 	@echo "\n- Monitoring files in mysql image using Splunk Universal Forwarder.\n"
@@ -73,6 +126,37 @@ step3:
 		--env SPLUNK_FORWARD_SERVER=splunk:9997 \
 		--env SPLUNK_ADD="monitor /var/log/mysql/ -index mysql_logs -auth admin:changeme" \
 		-d splunk/universalforwarder:6.4.1
+	@echo ""
+	@echo "+ - - - - - - - - - - - - - - - - -"
+	@echo " net_splunk                        |"
+	@echo "|"
+	@echo "    +--------------------------+   |"
+	@echo "|   |                          |"
+	@echo "    |          splunk          |   |"
+	@echo "|   |                          |"
+	@echo "    +--------------------------+   |"
+	@echo "|                 ^                    + - - - - - - - - - - - - - - - - - - - - - - -"
+	@echo "                  |                |    Volumes                                       |"
+	@echo "|                 |                    |"
+	@echo "    +--------------------------+   |                                                  |"
+	@echo "|   |                          |       |   +---------------------------------------+"
+	@echo "    |splunkforwarder_mysql_logs|---+------>|                                       |  |"
+	@echo "|   |                          |       |   |                                       |"
+	@echo "    +--------------------------+   |       |                                       |  |"
+	@echo "|                                      |   |                                       |"
+	@echo " - - - - - - - - - - - - - - - - - +       |                                       |  |"
+	@echo "                                       |   |                                       |"
+	@echo "+ - - - - - - - - - - - - - - - - -        |volume_wordpress_db_logs:/var/log/mysql|  |"
+	@echo " net_wordpress                     |   |   |                                       |"
+	@echo "|                                          |                                       |  |"
+	@echo "   +---------------------------+   |   |   |                                       |"
+	@echo "|  |                           |           |                                       |  |"
+	@echo "   |       wordpress_db        |---+---+-->|                                       |"
+	@echo "|  |                           |           |                                       |  |"
+	@echo "   +---------------------------+   |   |   +---------------------------------------+"
+	@echo "|                                                                                     |"
+	@echo " - - - - - - - - - - - - - - - - - +   + - - - - - - - - - - - - - - - - - - - - - - -"
+	@echo ""
 
 step4:
 	@echo "\n- Starting our node.js application with splunk-javascript-logging"
@@ -81,11 +165,25 @@ step4:
 	docker run \
 		--name my_app \
 		--net net_myapp \
-		--env SPLUNK_TOKEN=$$(docker exec splunk entrypoint.sh splunk http-event-collector list -uri https://localhost:8089 -auth admin:changeme | grep token | head -1 | cut -d'=' -f2) \
+		--env SPLUNK_TOKEN=00000000-0000-0000-0000-000000000000 \
 		--env SPLUNK_URL=https://splunk:8088 \
 		--env SPLUNK_SOURCETYPE=fake-data \
 		--env SPLUNK_SOURCE=nodejs-sdk \
 		-d my_app
+	@echo ""
+	@echo "+ - - - - - - - - - - - - - - - - - - - - -  + - - - - - - - - +"
+	@echo " net_myapp                                 |  net_splunk"
+	@echo "|                                            |                 |"
+	@echo "    +--------------------+         +-------+------------+"
+	@echo "|   |                    |         |                    |      |"
+	@echo "    |                    |         |                    |"
+	@echo "|   |       my_app       |--8088-->|       splunk       |      |"
+	@echo "    |                    |         |                    |"
+	@echo "|   |                    |         |                    |      |"
+	@echo "    +--------------------+         +-------+------------+"
+	@echo "|                                            |                 |"
+	@echo " - - - - - - - - - - - - - - - - - - - - - +  - - - - - - - - -"
+	@echo ""
 
 step5:
 	@echo "\n- Killing and removing existing Wordpress and DB (we keep the data in volumes)\n"
@@ -100,7 +198,7 @@ step5:
 		--label wordpress=db \
 		--net net_wordpress \
 			--log-driver=splunk \
-				--log-opt splunk-token=$$(docker exec splunk entrypoint.sh splunk http-event-collector list -uri https://localhost:8089 -auth admin:changeme | grep token | head -1 | cut -d'=' -f2) \
+				--log-opt splunk-token=00000000-0000-0000-0000-000000000000 \
 				--log-opt splunk-url=https://localhost:8088 \
 				--log-opt splunk-insecureskipverify=true \
 				--log-opt splunk-index=docker \
@@ -117,7 +215,7 @@ step5:
 		--env WORDPRESS_DB_PASSWORD=my-secret-pw \
 		--net net_wordpress \
 			--log-driver=splunk \
-				--log-opt splunk-token=$$(docker exec splunk entrypoint.sh splunk http-event-collector list -uri https://localhost:8089 -auth admin:changeme | grep token | head -1 | cut -d'=' -f2) \
+				--log-opt splunk-token=00000000-0000-0000-0000-000000000000 \
 				--log-opt splunk-url=https://localhost:8088 \
 				--log-opt splunk-insecureskipverify=true \
 				--log-opt splunk-index=docker \
@@ -127,4 +225,30 @@ step5:
 				--log-opt tag="{{.Name}}" \
 		--publish 80:80 \
 		-d wordpress
-
+	@echo ""
+	@echo "                                       + - - - - - - - - - - - - +"
+	@echo "                                        net_splunk"
+	@echo "                                       |                         |"
+	@echo "                                            +----------------+"
+	@echo "                                       |    |                |   |"
+	@echo "                                            |     splunk     |"
+	@echo "                                       |    |                |   |"
+	@echo "+ - - - - - - - - - - - - - - - +           +-------+--------+"
+	@echo " net_wordpress                         |            |            |"
+	@echo "|                               |       - - - - - - + - - - - - -"
+	@echo "                                                    |"
+	@echo "|    +----------------------+   |                   v"
+	@echo "     |wordpress_db          |                    +------+"
+	@echo "|    |                      |   |                |      |"
+	@echo "     |                      |------------------->|      |"
+	@echo "|    |                      |   |                |      |"
+	@echo "     +----------------------+                    |      |"
+	@echo "|    +----------------------+   |                | 8088 |"
+	@echo "     |wordpress             |                    |      |"
+	@echo "|    |                      |   |                |      |"
+	@echo "     |                      |------------------->|      |"
+	@echo "|    |                      |   |                |      |"
+	@echo "     +----------------------+                    +------+"
+	@echo "|                               |"
+	@echo " - - - - - - - - - - - - - - - -"
+	@echo ""
