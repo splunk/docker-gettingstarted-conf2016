@@ -1,7 +1,12 @@
+NO_COLOR=\x1b[0m
+GREEN_COLOR=\x1b[32;01m
+RED_COLOR=\x1b[31;01m
+YELLOW_COLOR=\x1b[33;01m
+
 clean:
-	-docker kill wordpress wordpress_db splunk
-	-docker rm -v wordpress wordpress_db splunk
-	-docker network rm net_wordpress net_splunk
+	-docker kill wordpress wordpress_db splunk my_app splunkforwarder_mysql_logs
+	-docker rm -v wordpress wordpress_db splunk my_app splunkforwarder_mysql_logs
+	-docker network rm net_wordpress net_splunk net_myapp
 	-docker volume rm volume_wordpress_db_data volume_wordpress_db_logs volume_splunk_etc volume_splunk_var
 
 step0:
@@ -10,6 +15,8 @@ step0:
 	docker pull haproxy
 	docker pull splunk/enterprise:6.4.1-monitor
 	docker pull splunk/universalforwarder:6.4.1
+	docker pull node:4-onbuild
+	(cd traffic_gen && docker build -t my_app .)
 
 step1:
 	@echo "\n- Creating new network net_wordpress for Wordpress + DB\n"
@@ -54,6 +61,8 @@ step2:
 		--volume /var/lib/docker/containers:/host/containers:ro \
 		--volume /var/log:/docker/log:ro \
 		--volume /var/run/docker.sock:/var/run/docker.sock:ro \
+		--volume volume_splunk_etc:/opt/splunk/etc \
+		--volume volume_splunk_var:/opt/splunk/var \
 		-d splunk/enterprise:6.4.1-monitor
 
 step3:
@@ -66,6 +75,19 @@ step3:
 		-d splunk/universalforwarder:6.4.1
 
 step4:
+	@echo "\n- Starting our node.js application with splunk-javascript-logging"
+	-docker network create net_myapp
+	-docker network connect net_myapp splunk
+	docker run \
+		--name my_app \
+		--net net_myapp \
+		--env SPLUNK_TOKEN=$$(docker exec splunk entrypoint.sh splunk http-event-collector list -uri https://localhost:8089 -auth admin:changeme | grep token | head -1 | cut -d'=' -f2) \
+		--env SPLUNK_URL=https://splunk:8088 \
+		--env SPLUNK_SOURCETYPE=fake-data \
+		--env SPLUNK_SOURCE=nodejs-sdk \
+		-d my_app
+
+step5:
 	@echo "\n- Killing and removing existing Wordpress and DB (we keep the data in volumes)\n"
 	docker kill wordpress_db wordpress
 	docker rm -v wordpress_db wordpress
