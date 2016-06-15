@@ -161,7 +161,7 @@ step3:
 step4:
 	@echo "\n- Starting our node.js application with splunk-javascript-logging"
 	-docker network create net_myapp
-	-docker network connect net_myapp splunk
+	-docker network connect net_myapp dockeritmonitoring_splunkenterprise_1
 	docker run \
 		--name my_app \
 		--net net_myapp \
