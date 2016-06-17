@@ -123,6 +123,7 @@ step3:
 	docker run --name splunkforwarder_mysql_logs \
 		--net net_splunk \
 		--volume volume_wordpress_db_logs:/var/log/mysql \
+		--env SPLUNK_START_ARGS="--accept-license" \
 		--env SPLUNK_FORWARD_SERVER=splunk:9997 \
 		--env SPLUNK_ADD="monitor /var/log/mysql/ -index mysql_logs -auth admin:changeme" \
 		-d splunk/universalforwarder:6.4.1
