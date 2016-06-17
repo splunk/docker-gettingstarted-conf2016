@@ -78,7 +78,7 @@ step2:
 		--env SPLUNK_START_ARGS=--accept-license \
 		--env SPLUNK_USER=root \
 		--env SPLUNK_ENABLE_LISTEN=9997 \
-		--env SPLUNK_ADD="index docker" \
+		--env SPLUNK_ADD="index myapp" \
 		--env SPLUNK_ADD_1="index mysql_logs" \
 		--publish 8000:8000 \
 		--publish 8088:8088 \
@@ -170,6 +170,7 @@ step4:
 		--env SPLUNK_URL=https://splunk:8088 \
 		--env SPLUNK_SOURCETYPE=fake-data \
 		--env SPLUNK_SOURCE=nodejs-sdk \
+		--env SPLUNK_INDEX=myapp \
 		-d my_app
 	@echo ""
 	@echo "+ - - - - - - - - - - - - - - - - - - - - -  + - - - - - - - - +"
@@ -202,7 +203,7 @@ step5:
 				--log-opt splunk-token=00000000-0000-0000-0000-000000000000 \
 				--log-opt splunk-url=https://localhost:8088 \
 				--log-opt splunk-insecureskipverify=true \
-				--log-opt splunk-index=docker \
+				--log-opt splunk-index=main \
 				--log-opt splunk-sourcetype=httpevent \
 				--log-opt splunk-source=db \
 				--log-opt labels=wordpress \
@@ -219,7 +220,7 @@ step5:
 				--log-opt splunk-token=00000000-0000-0000-0000-000000000000 \
 				--log-opt splunk-url=https://localhost:8088 \
 				--log-opt splunk-insecureskipverify=true \
-				--log-opt splunk-index=docker \
+				--log-opt splunk-index=main \
 				--log-opt splunk-sourcetype=httpevent \
 				--log-opt splunk-source=web \
 				--log-opt labels=wordpress \

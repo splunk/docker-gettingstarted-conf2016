@@ -25,7 +25,8 @@ function sendNext() {
         },
         metadata: {
             source: process.env.SPLUNK_SOURCE,
-            sourcetype: process.env.SPLUNK_SOURCETYPE
+            sourcetype: process.env.SPLUNK_SOURCETYPE,
+            index: process.env.SPLUNK_INDEX
         }
     }, function(err, resp, body) {
         setTimeout(sendNext, 100);
