@@ -72,22 +72,22 @@ step2:
 	docker network create net_splunk
 	docker volume create --name=volume_splunk_etc
 	docker volume create --name=volume_splunk_var
-#	docker run --name splunk \
-#		--hostname splunk \
-#		--net net_splunk \
-#		--env SPLUNK_START_ARGS=--accept-license \
-#		--env SPLUNK_USER=root \
-#		--env SPLUNK_ENABLE_LISTEN=9997 \
-#		--env SPLUNK_ADD="index myapp" \
-#		--env SPLUNK_ADD_1="index mysql_logs" \
-#		--publish 8000:8000 \
-#		--publish 8088:8088 \
-#		--volume /var/lib/docker/containers:/host/containers:ro \
-#		--volume /var/log:/docker/log:ro \
-#		--volume /var/run/docker.sock:/var/run/docker.sock:ro \
-#		--volume volume_splunk_etc:/opt/splunk/etc \
-#		--volume volume_splunk_var:/opt/splunk/var \
-#		-d splunk/enterprise:6.4.1-monitor
+	docker run --name splunk \
+		--hostname splunk \
+		--net net_splunk \
+		--env SPLUNK_START_ARGS=--accept-license \
+		--env SPLUNK_USER=root \
+		--env SPLUNK_ENABLE_LISTEN=9997 \
+		--env SPLUNK_ADD="index myapp" \
+		--env SPLUNK_ADD_1="index mysql_logs" \
+		--publish 8000:8000 \
+		--publish 8088:8088 \
+		--volume /var/lib/docker/containers:/host/containers:ro \
+		--volume /var/log:/docker/log:ro \
+		--volume /var/run/docker.sock:/var/run/docker.sock:ro \
+		--volume volume_splunk_etc:/opt/splunk/etc \
+		--volume volume_splunk_var:/opt/splunk/var \
+		-d splunk/enterprise:6.4.1-monitor
 	@echo ""
 	@echo "+ - - - - - - - - - - - - +         + - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
 	@echo " net_splunk                          Volumes                                                 |"
@@ -100,7 +100,7 @@ step2:
 	@echo "|    |                |   |         |  +--------------------------------------------------+"
 	@echo "     |                |                                                                      |"
 	@echo "|    |                |   |         + - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-	@echo "     | dockeritmonitoring_splunkenterprise_1     |                +--------------------------------------------------+"
+	@echo "     |     splunk     |                +--------------------------------------------------+"
 	@echo "|    |                |---+----------->|  /var/lib/docker/containers:/host/containers:ro  |"
 	@echo "     |                |                +--------------------------------------------------+"
 	@echo "|    |                |   |            +--------------------------------------------------+"
