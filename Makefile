@@ -123,12 +123,8 @@ step3:
 	docker run --name splunkforwarder_mysql_logs \
 		--net net_splunk \
 		--volume volume_wordpress_db_logs:/var/log/mysql \
-<<<<<<< HEAD
 		--env SPLUNK_START_ARGS="--accept-license" \
 		--env SPLUNK_FORWARD_SERVER=splunk:9997 \
-=======
-		--env SPLUNK_FORWARD_SERVER=dockeritmonitoring_splunkenterprise_1:9997 \
->>>>>>> feature/work-with-docker-compose
 		--env SPLUNK_ADD="monitor /var/log/mysql/ -index mysql_logs -auth admin:changeme" \
 		-d splunk/universalforwarder:6.4.1
 	@echo ""
@@ -166,12 +162,12 @@ step3:
 step4:
 	@echo "\n- Starting our node.js application with splunk-javascript-logging"
 	-docker network create net_myapp
-	-docker network connect net_myapp dockeritmonitoring_splunkenterprise_1
+	-docker network connect net_myapp splunk
 	docker run \
 		--name my_app \
 		--net net_myapp \
 		--env SPLUNK_TOKEN=00000000-0000-0000-0000-000000000000 \
-		--env SPLUNK_URL=https://dockeritmonitoring_splunkenterprise_1:8088 \
+		--env SPLUNK_URL=https://splunk:8088 \
 		--env SPLUNK_SOURCETYPE=fake-data \
 		--env SPLUNK_SOURCE=nodejs-sdk \
 		--env SPLUNK_INDEX=myapp \
