@@ -26,7 +26,6 @@ git clone https://github.com/splunk/docker-gettingstarted-dockercon16.git
   * make step2
   * make step3
   * make step4
-  * make step5
 
 4. Access your docker IP address via port 8000 ex: 127.0.0.1:8000
  * Login to splunk
@@ -43,9 +42,14 @@ git clone https://github.com/splunk/docker-gettingstarted-dockercon16.git
    ** extract (email portion) label as “Email"
     * extract (ip address as) “IP_Address"
     * extract ID portion as “ID"
- 
-Showing the Docker Overview screen provides good insight into a breadth of items you can show.
 
+5. Demonstrate how you can use the Splunk logging driver, https://docs.docker.com/engine/admin/logging/splunk/
+ * Go back to your terminal window and enter command: 
+  * make step5 
+
+6. Look at the Splunk logging driver data from the Splunk docker overview dashboard, http://127.0.0.1:8000/en-US/app/app-docker/docker_overview?form.time.earliest=rt-10m&form.time.latest=rt&form.container_name=*&earliest=0&latest=
+
+Showing the Docker Overview screen provides good insight into a breadth of items you can show.
 
 # Get help and support
 
