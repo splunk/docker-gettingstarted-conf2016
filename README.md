@@ -15,35 +15,34 @@ Demo of Splunk Image with Docker App running in Docker container (Note this imag
 * login to dockerhub account (command: docker login) - you will then be prompted to enter your credentials
 
 3. Clone Github Repo
-* In Terminal enter command: 
+ * In Terminal enter command: 
 git clone https://github.com/splunk/docker-gettingstarted-dockercon16.git
-
-* you will be prompted to login to github - you will be prompted to enter credentials
-* Access the github directory that was just created
-* Enter the following commands and let each run
-** make clean [Note: you will get Error 1 (ignored) if running first time]
-** make step0
-** make step1
-** make step2
-** make step3
-** make step4
-** make step5
+ * you will be prompted to login to github - you will be prompted to enter credentials
+ * Access the github directory that was just created
+ * Enter the following commands and let each run
+  * make clean [Note: you will get Error 1 (ignored) if running first time]
+  * make step0
+  * make step1
+  * make step2
+  * make step3
+  * make step4
+  * make step5
 
 4. Access your docker IP address via port 8000 ex: 127.0.0.1:8000
-* Login to splunk
-** Go to SettingsàAccess Controls à Roles àAdmin
-*** Indexes searched by default
-*** Add docker and mysql_logs
-*** SAVE
-** In Docker Overview app change time from ‘Real-time’ to ‘Last 60 minutes’
+ * Login to splunk
+  * Go to Settings > Access Controls > Roles > Admin
+    * Indexes searched by default
+    * Add docker and mysql_logs
+    * SAVE
+  * In Docker Overview app change time from ‘Real-time’ to ‘Last 60 minutes’
 * Go to the search app
-** search sourcetype=“fake-data"
-** Select Extract new fields
-*** select event click next
-*** select method regular expression
-**** extract (email portion) label as “Email"
-**** extract (ip address as) “IP_Address"
-**** extract ID portion as “ID"
+  * search sourcetype=“fake-data"
+  * Select Extract new fields
+   * select event click next
+   * select method regular expression
+   ** extract (email portion) label as “Email"
+    * extract (ip address as) “IP_Address"
+    * extract ID portion as “ID"
  
 Showing the Docker Overview screen provides good insight into a breadth of items you can show.
 
