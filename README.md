@@ -15,11 +15,11 @@ Demo of Splunk Image with Docker App running in Docker container (Note this imag
 * login to dockerhub account (command: docker login) - you will then be prompted to enter your credentials
 
 3. Clone Github Repo
- * In Terminal enter command: 
+* In Terminal enter command: 
 git clone https://github.com/splunk/docker-gettingstarted-dockercon16.git
  * you will be prompted to login to github - you will be prompted to enter credentials
  * Access the github directory that was just created
- * Enter the following commands and let each run
+* Enter the following commands and let each run
   * make clean [Note: you will get Error 1 (ignored) if running first time]
   * make step0
   * make step1
@@ -27,13 +27,15 @@ git clone https://github.com/splunk/docker-gettingstarted-dockercon16.git
   * make step3
   * make step4
 
-4. Access your docker IP address via port 8000 ex: 127.0.0.1:8000
- * Login to splunk
+4. Access your Splunk Enterprise web UI, http://127.0.0.1:8000/
+
+5. Try a sample field extraction for the sample app
+*Give yourself read access to the new Splunk indexes
   * Go to Settings > Access Controls > Roles > Admin
-    * Indexes searched by default
-    * Add docker and mysql_logs
-    * SAVE
-  * In Docker Overview app change time from ‘Real-time’ to ‘Last 60 minutes’
+  * Indexes searched by default
+   * Add docker and mysql_logs
+   * SAVE
+
 * Go to the search app
   * search sourcetype=“fake-data"
   * Select Extract new fields
@@ -44,10 +46,10 @@ git clone https://github.com/splunk/docker-gettingstarted-dockercon16.git
     * extract ID portion as “ID"
 
 5. Demonstrate how you can use the Splunk logging driver, https://docs.docker.com/engine/admin/logging/splunk/
- * Go back to your terminal window and enter command: 
+* Go back to your terminal window and enter command: 
   * make step5 
 
-6. Look at the Splunk logging driver data from the Splunk docker overview dashboard, http://127.0.0.1:8000/en-US/app/app-docker/docker_overview?form.time.earliest=rt-10m&form.time.latest=rt&form.container_name=*&earliest=0&latest=
+* Look at the Splunk logging driver data from the Splunk docker overview dashboard, http://127.0.0.1:8000/en-US/app/app-docker/docker_overview?form.time.earliest=rt-10m&form.time.latest=rt&form.container_name=*&earliest=0&latest=
 
 Showing the Docker Overview screen provides good insight into a breadth of items you can show.
 
