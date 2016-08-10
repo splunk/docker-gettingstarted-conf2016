@@ -15,9 +15,11 @@ Logger.eventFormatter = function (message, severity) {
     return message.line;
 }
 
+var index = 0;
+
 function sendNext() {
-    var line = faker.fake("{{internet.email}} from {{internet.ip}} with {{finance.account}} [{{internet.protocol}}]");
-    console.log("Sending: ", line);
+    var line = faker.fake((++index) + " {{internet.email}} from {{internet.ip}} with {{finance.account}} [{{internet.protocol}}]");
+    // console.log("Sending: ", line);
     // Sending data to Splunk
     Logger.send({
         message: {
@@ -29,8 +31,12 @@ function sendNext() {
             index: process.env.SPLUNK_INDEX
         }
     }, function(err, resp, body) {
+        if (err) {
+            console.error(err);
+        } else if (body.code != 0) {
+            console.log("Response:", body);
+        }
         setTimeout(sendNext, 100);
-        console.log("Response:", body);
     });
 }
 
