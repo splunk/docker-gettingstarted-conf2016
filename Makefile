@@ -13,8 +13,8 @@ step0:
 	docker pull mariadb
 	docker pull wordpress
 	docker pull haproxy
-	docker pull splunk/enterprise:6.4.1-monitor
-	docker pull splunk/universalforwarder:6.4.1
+	docker pull splunk/enterprise:6.4.3-monitor
+	docker pull splunk/universalforwarder:6.4.3
 	docker pull node:4-onbuild
 	(cd traffic_gen && docker build -t my_app .)
 
@@ -87,7 +87,7 @@ step2:
 		--volume /var/run/docker.sock:/var/run/docker.sock:ro \
 		--volume volume_splunk_etc:/opt/splunk/etc \
 		--volume volume_splunk_var:/opt/splunk/var \
-		-d splunk/enterprise:6.4.1-monitor
+		-d splunk/enterprise:6.4.3-monitor
 	@echo ""
 	@echo "+ - - - - - - - - - - - - +         + - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
 	@echo " net_splunk                          Volumes                                                 |"
@@ -126,7 +126,7 @@ step3:
 		--env SPLUNK_START_ARGS="--accept-license" \
 		--env SPLUNK_FORWARD_SERVER=splunk:9997 \
 		--env SPLUNK_ADD="monitor /var/log/mysql/ -index mysql_logs -auth admin:changeme" \
-		-d splunk/universalforwarder:6.4.1
+		-d splunk/universalforwarder:6.4.3
 	@echo ""
 	@echo "+ - - - - - - - - - - - - - - - - -"
 	@echo " net_splunk                        |"
@@ -201,7 +201,7 @@ step5:
 		--net net_wordpress \
 			--log-driver=splunk \
 				--log-opt splunk-token=00000000-0000-0000-0000-000000000000 \
-				--log-opt splunk-url=https://192.168.99.100:8088 \
+				--log-opt splunk-url=https://127.0.0.1:8088 \
 				--log-opt splunk-insecureskipverify=true \
 				--log-opt splunk-index=main \
 				--log-opt splunk-sourcetype=httpevent \
@@ -218,7 +218,7 @@ step5:
 		--net net_wordpress \
 			--log-driver=splunk \
 				--log-opt splunk-token=00000000-0000-0000-0000-000000000000 \
-				--log-opt splunk-url=https://192.168.99.100:8088 \
+				--log-opt splunk-url=https://127.0.0.1:8088 \
 				--log-opt splunk-insecureskipverify=true \
 				--log-opt splunk-index=main \
 				--log-opt splunk-sourcetype=httpevent \
