@@ -49,7 +49,7 @@ git clone https://github.com/splunk/docker-gettingstarted-conf16.git
  * Go back to your terminal window and enter command: 
   * make step5 
 
- * Look at the Splunk logging driver data from the Splunk docker overview dashboard, http://127.0.0.1:8000/en-US/app/app-docker/docker_overview?form.time.earliest=rt-10m&form.time.latest=rt&form.container_name=*&earliest=0&latest=
+ * Look at the Splunk logging driver data from the Splunk docker overview dashboard, http://127.0.0.1:8000/en-US/app/app-docker/docker_overview
 
 Showing the Docker Overview screen provides good insight into a breadth of items you can show.
 
