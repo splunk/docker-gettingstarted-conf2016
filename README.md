@@ -2,10 +2,11 @@
 
 Splunk Enterprise Docker Image
 Demo of Splunk Image with Docker App running in Docker container (Note this image is not yet available on public repo due to legal issues— we are working to resolve and plan to make it publicly available in the future. Additionally we plan to make the docker app available on Splunkbase)
-1) You will need a DockerHub account
-2) You will need a GitHub Account
-3) Please send account info to marc chene for access to both repos
-4) You will need an IDE on your system so you can run make and git commands
+0. (Optional) Sign up for a Docker ID at [Docker Hub](https://hub.docker.com)
+0. Signup for a GitHub Account
+0. Download and install Docker on your system.
+0. Open a shell prompt or Terminal window.
+0. You will need an IDE on your system so you can run make and git commands.
  
 ## Steps for configuring demo
 1. Install Docker Toolbox (Mac OS below)
