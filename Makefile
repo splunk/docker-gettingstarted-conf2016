@@ -1,8 +1,3 @@
-NO_COLOR=\x1b[0m
-GREEN_COLOR=\x1b[32;01m
-RED_COLOR=\x1b[31;01m
-YELLOW_COLOR=\x1b[33;01m
-
 clean:
 	-docker kill wordpress wordpress_db splunk my_app splunkforwarder_mysql_logs
 	-docker rm -v wordpress wordpress_db splunk my_app splunkforwarder_mysql_logs
