@@ -1,4 +1,4 @@
-# docker-gettingstarted-conf16
+# docker-gettingstarted-conf2016
 
 Splunk Enterprise Docker Image
 Demo of Splunk Image with Docker App running in Docker container (Note this image is not yet available on public repo due to legal issues— we are working to resolve and plan to make it publicly available in the future. Additionally we plan to make the docker app available on Splunkbase)
@@ -16,7 +16,7 @@ Demo of Splunk Image with Docker App running in Docker container (Note this imag
 
 3. Clone Github Repo
  * In Terminal enter command: 
-git clone https://github.com/splunk/docker-gettingstarted-conf16.git
+git clone https://github.com/splunk/docker-gettingstarted-conf2016.git
   * you will be prompted to login to github - you will be prompted to enter credentials
   * Access the github directory that was just created
  * Enter the following commands and let each run
