@@ -1,3 +1,10 @@
+export SPLUNK_VERSION ?= 6.5.0
+
+NO_COLOR=\x1b[0m
+GREEN_COLOR=\x1b[32;01m
+RED_COLOR=\x1b[31;01m
+YELLOW_COLOR=\x1b[33;01m
+
 clean:
 	-docker kill wordpress wordpress_db splunk my_app splunkforwarder_mysql_logs
 	-docker rm -v wordpress wordpress_db splunk my_app splunkforwarder_mysql_logs
@@ -8,8 +15,8 @@ step0:
 	docker pull mariadb
 	docker pull wordpress
 	docker pull haproxy
-	docker pull splunk/enterprise:6.4.3-monitor
-	docker pull splunk/universalforwarder:6.4.3
+	docker pull splunk/enterprisetrial:$(SPLUNK_VERSION)-monitor
+	docker pull splunk/universalforwarder:6.5.0
 	docker pull node:4-onbuild
 	(cd traffic_gen && docker build -t my_app .)
 
@@ -82,7 +89,7 @@ step2:
 		--volume /var/run/docker.sock:/var/run/docker.sock:ro \
 		--volume volume_splunk_etc:/opt/splunk/etc \
 		--volume volume_splunk_var:/opt/splunk/var \
-		-d splunk/enterprise:6.4.3-monitor
+		-d splunk/enterprisetrial:$(SPLUNK_VERSION)-monitor
 	@echo ""
 	@echo "+ - - - - - - - - - - - - +         + - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
 	@echo " net_splunk                          Volumes                                                 |"
@@ -121,7 +128,7 @@ step3:
 		--env SPLUNK_START_ARGS="--accept-license" \
 		--env SPLUNK_FORWARD_SERVER=splunk:9997 \
 		--env SPLUNK_ADD="monitor /var/log/mysql/ -index mysql_logs -auth admin:changeme" \
-		-d splunk/universalforwarder:6.4.3
+		-d splunk/universalforwarder:6.5.0
 	@echo ""
 	@echo "+ - - - - - - - - - - - - - - - - -"
 	@echo " net_splunk                        |"
