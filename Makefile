@@ -15,7 +15,7 @@ step0:
 	docker pull mariadb
 	docker pull wordpress
 	docker pull haproxy
-	docker pull splunk/enterprisetrial:$(SPLUNK_VERSION)-monitor
+	docker pull splunk/splunk:$(SPLUNK_VERSION)-monitor
 	docker pull splunk/universalforwarder:6.5.0
 	docker pull node:4-onbuild
 	(cd traffic_gen && docker build -t my_app .)
@@ -89,7 +89,7 @@ step2:
 		--volume /var/run/docker.sock:/var/run/docker.sock:ro \
 		--volume volume_splunk_etc:/opt/splunk/etc \
 		--volume volume_splunk_var:/opt/splunk/var \
-		-d splunk/enterprisetrial:$(SPLUNK_VERSION)-monitor
+		-d splunk/splunk:$(SPLUNK_VERSION)-monitor
 	@echo ""
 	@echo "+ - - - - - - - - - - - - +         + - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
 	@echo " net_splunk                          Volumes                                                 |"
