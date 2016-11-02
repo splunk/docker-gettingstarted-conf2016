@@ -33,7 +33,7 @@ git clone https://github.com/splunk/docker-gettingstarted-conf2016.git
  * Give yourself read access to the new Splunk indexes
    * Go to Settings > Access Controls > Roles > Admin
    * Indexes searched by default
-   * Add docker and mysql_logs
+   * Add mysql_logs
    * SAVE
 
  * Go to the search app
