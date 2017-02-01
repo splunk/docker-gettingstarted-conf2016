@@ -1,4 +1,4 @@
-export SPLUNK_VERSION ?= 6.5.0
+export SPLUNK_VERSION ?= 6.5.2
 
 NO_COLOR=\x1b[0m
 GREEN_COLOR=\x1b[32;01m
@@ -16,7 +16,7 @@ step0:
 	docker pull wordpress
 	docker pull haproxy
 	docker pull splunk/splunk:$(SPLUNK_VERSION)-monitor
-	docker pull splunk/universalforwarder:6.5.0
+	docker pull splunk/universalforwarder:6.5.2
 	docker pull node:4-onbuild
 	(cd traffic_gen && docker build -t my_app .)
 
@@ -128,7 +128,7 @@ step3:
 		--env SPLUNK_START_ARGS="--accept-license" \
 		--env SPLUNK_FORWARD_SERVER=splunk:9997 \
 		--env SPLUNK_ADD="monitor /var/log/mysql/ -index mysql_logs -auth admin:changeme" \
-		-d splunk/universalforwarder:6.5.0
+		-d splunk/universalforwarder:6.5.2
 	@echo ""
 	@echo "+ - - - - - - - - - - - - - - - - -"
 	@echo " net_splunk                        |"
